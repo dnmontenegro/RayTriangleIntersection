@@ -1,0 +1,29 @@
+from src.vector3d import Vector3d, normalize, clamp
+
+def main():
+    print("RayTracer")
+    a = Vector3d(1.0, 0.0, -1.0)
+    b = Vector3d(-1.0, 1.0, 1.0)
+    print("a = " + str(a))
+    print("b = " + str(b))
+    print("a + b = " + str(a + b))
+    print("a - b = " + str(a - b))
+    print("a * 2 = " + str(a * 2))
+    print("2 * a = " + str(2 * a))
+    print("b / 2 = " + str(b / 2))
+    print("a.dot(b) = " + str(a.dot(b)))
+    print("b.dot(a) = " + str(b.dot(a)))
+    print("a.squared_length() = " + str(a.squared_length()))
+    print("b.length() = " + str(b.length()))
+    print("a.distance(b) = " + str(a.distance(b)))
+    print("a.cross(b) = " + str(a.cross(b)))
+    print("b.cross(a) = " + str(b.cross(a)))
+    print("normalize(a) = " + str(normalize(a)))
+    print("abs(a) = " + str(abs(a)))
+    print("b.normalize() = " + str(b.normalize()))
+    print("b.abs() = " + str(b.abs()))
+    print("a = " + str(a))
+    print("b = " + str(b))
+
+if __name__ == "__main__":
+    main()
