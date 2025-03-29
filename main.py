@@ -1,4 +1,4 @@
-from src.vector3d import Vector3d, normalize, clamp
+from src.vector3d import Vector3d, normalize
 
 def main():
     print("RayTracer")
