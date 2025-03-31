@@ -1,7 +1,9 @@
 import math
 
-class Vector3d:
-    def __init__(self, x, y):
+class Vector2d:
+    def __init__(self, x, y = None):
+        if y is None:
+            self.vec = [x, x]
         self.vec = [x, y]
 
     def __repr__(self):
@@ -19,7 +21,7 @@ class Vector3d:
         return iter(self.vec)
     
     def __eq__(self, v):
-        if not isinstance(v, Vector3d):
+        if not isinstance(v, Vector2d):
             return False
         x, y = self.vec
         vx, vy = v.vec
@@ -27,28 +29,28 @@ class Vector3d:
     
     def __neg__(self):
         x, y = self.vec
-        return Vector3d(-x, -y)
+        return Vector2d(-x, -y)
 
     def __add__(self, v):
         x, y = self.vec
         vx, vy = v.vec
-        return Vector3d(x + vx, y + vy)
+        return Vector2d(x + vx, y + vy)
     
     def __sub__(self, v):
         x, y = self.vec
         vx, vy = v.vec
-        return Vector3d(x - vx, y - vy)
+        return Vector2d(x - vx, y - vy)
     
     def __mul__(self, scale):
         x, y = self.vec
-        return Vector3d(x * scale, y * scale)
+        return Vector2d(x * scale, y * scale)
     
     def __rmul__(self, scale):
         return self * scale
     
     def __truediv__(self, scale):
         x, y = self.vec
-        return Vector3d(x / scale, y / scale)
+        return Vector2d(x / scale, y / scale)
     
     def __iadd__(self, v):
         self.vec = [sum(x) for x in zip(self.vec, v.vec)]
@@ -89,7 +91,7 @@ class Vector3d:
     
     def __abs__(self):
         x, y = self.vec
-        return Vector3d(abs(x), abs(y))
+        return Vector2d(abs(x), abs(y))
 
     def normalize(self):
         self /= self.length()

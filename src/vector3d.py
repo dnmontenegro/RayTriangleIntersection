@@ -1,7 +1,9 @@
 import math
 
 class Vector3d:
-    def __init__(self, x, y, z):
+    def __init__(self, x, y = None, z = None):
+        if y is None and z is None:
+            self.vec = [x, x, x]
         self.vec = [x, y, z]
 
     def __repr__(self):

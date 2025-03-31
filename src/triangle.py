@@ -1,4 +1,8 @@
-import vector3d, vector2d, math
+from vector3d import Vector3d
+from vector2d import Vector2d
+from ray import Ray
+
+import math
 
 class Triangle:
     def __init__(self, *args):
@@ -12,7 +16,7 @@ class Triangle:
             self.texture_coord_list = None
         
         # Three vertices
-        elif len(args) == 3 and all(isinstance(arg, vector3d) for arg in args):
+        elif len(args) == 3 and all(isinstance(arg, Vector3d) for arg in args):
             self.vertex_idx = [0, 1, 2]
             self.normal_idx = [None] * 3
             self.texture_coord_idx = [None] * 3
@@ -31,7 +35,7 @@ class Triangle:
             self.texture_coord_list = None
 
         # Three vertices and three normals
-        elif len(args) == 6 and all(isinstance(arg, vector3d) for arg in args):
+        elif len(args) == 6 and all(isinstance(arg, Vector3d) for arg in args):
             v1, v2, v3, n1, n2, n3 = args
             self.vertex_idx = [0, 1, 2]
             self.normal_idx = [0, 1, 2]
@@ -41,7 +45,7 @@ class Triangle:
             self.texture_coord_list = None
 
         # Three vertex indices and a vertex list and three normal indices and a normal list
-        elif len(args) == 8 and isinstance(args[7], list) and all(isinstance(arg, vector3d) for arg in args[7]):
+        elif len(args) == 8 and isinstance(args[7], list) and all(isinstance(arg, Vector3d) for arg in args[7]):
             v1_idx, v2_idx, v3_idx, vertex_list, n1_idx, n2_idx, n3_idx, normal_list = args
             self.vertex_idx = [v1_idx, v2_idx, v3_idx]
             self.normal_idx = [n1_idx, n2_idx, n3_idx]
@@ -51,7 +55,7 @@ class Triangle:
             self.texture_coord_list = None
 
         # Three vertices and three texture coordinates
-        elif len(args) == 6 and all(isinstance(arg, vector3d) for arg in args[:3]) and all(isinstance(arg, vector2d) for arg in args[3:]):
+        elif len(args) == 6 and all(isinstance(arg, Vector3d) for arg in args[:3]) and all(isinstance(arg, Vector2d) for arg in args[3:]):
             v1, v2, v3, t1, t2, t3 = args
             self.vertex_idx = [0, 1, 2]
             self.normal_idx = [None] * 3
@@ -61,7 +65,7 @@ class Triangle:
             self.texture_coord_list = [t1, t2, t3]
 
         # Three vertex indices and a vertex list and three texture coordinate indices and a texture coordinate list
-        elif len(args) == 8 and isinstance(args[7], list) and all(isinstance(arg, vector2d) for arg in args[7]):
+        elif len(args) == 8 and isinstance(args[7], list) and all(isinstance(arg, Vector2d) for arg in args[7]):
             v1_idx, v2_idx, v3_idx, vertex_list, t1_idx, t2_idx, t3_idx, texture_coord_list = args
             self.vertex_idx = [v1_idx, v2_idx, v3_idx]
             self.normal_idx = [None] * 3
@@ -71,7 +75,7 @@ class Triangle:
             self.texture_coord_list = texture_coord_list
 
         # Three vertices and three normals and three texture coordinates
-        elif len(args) == 9 and all(isinstance(arg, vector3d) for arg in args[:6]) and all(isinstance(arg, vector2d) for arg in args[6:]):
+        elif len(args) == 9 and all(isinstance(arg, Vector3d) for arg in args[:6]) and all(isinstance(arg, Vector2d) for arg in args[6:]):
             v1, v2, v3, n1, n2, n3, t1, t2, t3 = args
             self.vertex_idx = [0, 1, 2]
             self.normal_idx = [0, 1, 2]
@@ -111,7 +115,7 @@ class Triangle:
     def has_per_vertex_texture_coordinates(self):
         return self.texture_coord_list is not None
     
-    def intersect(self, r, barycentric_coord, t):
+    def intersect(self, r: Ray, barycentric_coord, t):
         V = r.direction()
         N = self.normal()
         
@@ -156,6 +160,29 @@ class Triangle:
         return e1.cross(e2).normalize()
 
     def shading_axis(self):
+        if not self._textureCoord_list:
+            return (self.vertex(1) - self.vertex(0)).normalize()
+
+        v1 = self.vertex(1) - self.vertex(0)
+        v2 = self.vertex(2) - self.vertex(0)
+        t1 = self.textureCoordinate(1) - self.textureCoordinate(0)
+        t2 = self.textureCoordinate(2) - self.textureCoordinate(0)
+
+        if abs(t1.v) < EPSILON:
+            return (t1.u * v1).normalize()
+        
+        if abs(t2.v) < EPSILON:
+            return (t2.u * v2).normalize()
+
+        inv_delta_beta = t1.u - t1.v * t2.u / t2.v
+
+        if abs(inv_delta_beta) < EPSILON:
+            return v1.normalize()
+
+        delta_beta = 1.0 / inv_delta_beta
+        delta_gamma = -delta_beta * t1.v / t2.v
+
+        return (delta_beta * v1 + delta_gamma * v2).normalize()
 
     def normal_barycentric(self, barycentric_coord):
         if not self.hasPerVertexNormals():
