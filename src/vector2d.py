@@ -1,7 +1,7 @@
 import math
 
 class Vector2d:
-    def __init__(self, x, y = None):
+    def __init__(self, x = 0.0, y = None):
         if y is None:
             self.vec = [x, x]
         self.vec = [x, y]
@@ -9,16 +9,17 @@ class Vector2d:
     def __repr__(self):
         return f"{self.vec}"
     
-    def __len__(self):
+    @staticmethod
+    def size():
         return 2
+    
+    def __iter__(self):
+        return iter(self.vec)
 
     def __getitem__(self, index):
         if not 0 <= index < 2:
             raise IndexError("Index out of range")
         return self.vec[index]
-    
-    def __iter__(self):
-        return iter(self.vec)
     
     def __eq__(self, v):
         if not isinstance(v, Vector2d):

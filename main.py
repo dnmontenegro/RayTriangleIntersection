@@ -1,4 +1,4 @@
-from src.vector3d import Vector3d, normalize
+from src.vector3d import Vector3d, normalize, clamp, swap
 
 def main():
     print("RayTracer")
@@ -24,6 +24,16 @@ def main():
     print("b.abs() = " + str(b.abs()))
     print("a = " + str(a))
     print("b = " + str(b))
+    print("clamp(a) = " + str(clamp(a, 0.6, 1)))
+    print("b.clamp() = " + str(b.clamp(0.6, 1)))
+    print("a = " + str(a))
+    print("b = " + str(b))
+    print("swap(a, b)")
+    swap(a, b)
+    print("a = " + str(a))
+    print("b = " + str(b))
+    print("Vector3d.size() = " + str(Vector3d.size()))
+    print("a.size() = " + str(a.size()))
 
 if __name__ == "__main__":
     main()

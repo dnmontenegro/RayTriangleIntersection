@@ -1,7 +1,7 @@
 import math
 
 class Vector3d:
-    def __init__(self, x, y = None, z = None):
+    def __init__(self, x = 0.0, y = None, z = None):
         if y is None and z is None:
             self.vec = [x, x, x]
         self.vec = [x, y, z]
@@ -9,16 +9,17 @@ class Vector3d:
     def __repr__(self):
         return f"{self.vec}"
     
-    def __len__(self):
+    @staticmethod
+    def size():
         return 3
+    
+    def __iter__(self):
+        return iter(self.vec)
 
     def __getitem__(self, index):
         if not 0 <= index < 3:
             raise IndexError("Index out of range")
         return self.vec[index]
-    
-    def __iter__(self):
-        return iter(self.vec)
     
     def __eq__(self, v):
         if not isinstance(v, Vector3d):
@@ -98,7 +99,7 @@ class Vector3d:
         x, y, z = self.vec
         return Vector3d(abs(x), abs(y), abs(z))
 
-    def clamp(self, lower, upper):
+    def clamp(self, lower = 0.0, upper = 1.0):
         self.vec = [max(lower, min(x, upper)) for x in self.vec]
         return self
 
@@ -112,6 +113,6 @@ def normalize(v):
 def swap(a , b):
     a.vec, b.vec = b.vec, a.vec
 
-def clamp(v, lower=0.0, upper=1.0):
+def clamp(v, lower = 0.0, upper = 1.0):
     x, y, z = v.vec
     return Vector3d(max(lower, min(x, upper)), max(lower, min(y, upper)), max(lower, min(z, upper)))
