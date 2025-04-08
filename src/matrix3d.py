@@ -16,6 +16,9 @@ class Matrix3d:
             X, Y, Z = args
             self._data = [[X[0], Y[0], Z[0]], [X[1], Y[1], Z[1]], [X[2], Y[2], Z[2]]]
 
+    def __repr__(self):
+        return f"{self._data}"
+
     @staticmethod
     def width():
         return 3
@@ -31,12 +34,12 @@ class Matrix3d:
     def __iter__(self):
         return iter(self._data)
         
-    def clear(self, value):
+    def clear(self, value = 0.0):
         for i in range(3):
             for j in range(3):
                 self._data[i][j] = value
 
-    def set_diagonal(self, value): 
+    def set_diagonal(self, value = 1.0): 
         for i in range(3):
             self._data[i][i] = value
 
@@ -46,4 +49,100 @@ class Matrix3d:
                 self._data[i][j], self._data[j][i] = self._data[j][i], self._data[i][j]
         return self
     
+    def __call__(self, i, j):
+        if i >= 3 or j >= 3:
+            raise IndexError("Index out of range")
+        return self._data[i][j]
+    
+    def __add__(self, m):
+        result = Matrix3d()
+        for i in range(3):
+            for j in range(3):
+                result._data[i][j] = self._data[i][j] + m._data[i][j]
+        return result
 
+    def __sub__(self, m):
+        result = Matrix3d()
+        for i in range(3):
+            for j in range(3):
+                result._data[i][j] = self._data[i][j] - m._data[i][j]
+        return result
+
+    def __mul__(self, other):
+        # Matrix multiplication
+        if isinstance(other, Matrix3d):
+            result = Matrix3d()
+            for i in range(3):
+                for j in range(3):
+                    for k in range(3):
+                        result._data[i][j] += self._data[i][k] * other._data[k][j]
+            return result
+        
+        # Vector-matrix multiplication
+        elif isinstance(other, Vector3d): 
+            result = Vector3d()
+            for i in range(3):
+                for j in range(3):
+                    result[i] += self._data[i][j] * other[j]
+            return result
+        
+        # Scalar multiplication
+        else:
+            result = Matrix3d()
+            for i in range(3):
+                for j in range(3):
+                    result._data[i][j] = self._data[i][j] * other
+            return result
+        
+    def __rmul__(self, other):
+        return self * other
+    
+    def __truediv__(self, scale):
+        result = Matrix3d()
+        for i in range(3):
+            for j in range(3):
+                result._data[i][j] = self._data[i][j] / scale
+        return result
+
+    def __iadd__(self, m):
+        for i in range(3):
+            for j in range(3):
+                self._data[i][j] += m._data[i][j]
+        return self
+
+    def __isub__(self, m):
+        for i in range(3):
+            for j in range(3):
+                self._data[i][j] -= m._data[i][j]
+        return self
+
+    def __imul__(self, other):
+        # Matrix multiplication
+        if isinstance(other, Matrix3d): 
+            result = Matrix3d()
+            for i in range(3):
+                for j in range(3):
+                    for k in range(3):
+                        result._data[i][j] += self._data[i][k] * other._data[k][j]
+            self._data = result._data
+            return self
+        
+        # Scalar multiplication
+        else:
+            for i in range(3):
+                for j in range(3):
+                    self._data[i][j] *= other
+            return self
+
+    def __idiv__(self, scale):
+        for i in range(3):
+            for j in range(3):
+                self._data[i][j] /= scale
+        return self
+
+def swap(a , b):
+    a._data, b._data = b._data, a._data
+
+def transpose(m):
+    X, Y, Z = m._data
+    return Matrix3d(X, Y, Z).transpose()
