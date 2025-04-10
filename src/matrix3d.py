@@ -1,4 +1,4 @@
-from vector3d import Vector3d
+from .vector3d import Vector3d
 
 class Matrix3d:
     def __init__(self, *args):
@@ -49,12 +49,19 @@ class Matrix3d:
                 self._data[i][j], self._data[j][i] = self._data[j][i], self._data[i][j]
         return self
     
-    def __call__(self, i, j):
-        if i >= 3 or j >= 3:
+    def __getitem__(self, index):
+        if not 0 <= index < 3:
             raise IndexError("Index out of range")
-        return self._data[i][j]
+        return self._data[index]
+    
+    def __setitem__(self, index, value):
+        if not 0 <= index < 3:
+            raise IndexError("Index out of range")
+        self._data[index] = value
     
     def __add__(self, m):
+        if not isinstance(m, Matrix3d):
+            raise TypeError("Type error")
         result = Matrix3d()
         for i in range(3):
             for j in range(3):
@@ -62,6 +69,8 @@ class Matrix3d:
         return result
 
     def __sub__(self, m):
+        if not isinstance(m, Matrix3d):
+            raise TypeError("Type error")
         result = Matrix3d()
         for i in range(3):
             for j in range(3):
@@ -95,9 +104,18 @@ class Matrix3d:
             return result
         
     def __rmul__(self, other):
-        return self * other
+        if isinstance(other, Vector3d):
+            result = Vector3d()
+            for i in range(3):
+                for j in range(3):
+                    result[j] += self._data[i][j] * other[i]
+            return result
+        else:
+            return self * other
     
     def __truediv__(self, scale):
+        if not isinstance(scale, (int, float)):
+            raise TypeError("Type error")
         result = Matrix3d()
         for i in range(3):
             for j in range(3):
@@ -105,12 +123,16 @@ class Matrix3d:
         return result
 
     def __iadd__(self, m):
+        if not isinstance(m, Matrix3d):
+            raise TypeError("Type error")
         for i in range(3):
             for j in range(3):
                 self._data[i][j] += m._data[i][j]
         return self
 
     def __isub__(self, m):
+        if not isinstance(m, Matrix3d):
+            raise TypeError("Type error")
         for i in range(3):
             for j in range(3):
                 self._data[i][j] -= m._data[i][j]
@@ -135,6 +157,8 @@ class Matrix3d:
             return self
 
     def __idiv__(self, scale):
+        if not isinstance(scale, (int, float)):
+            raise TypeError("Type error")
         for i in range(3):
             for j in range(3):
                 self._data[i][j] /= scale
@@ -144,5 +168,8 @@ def swap(a , b):
     a._data, b._data = b._data, a._data
 
 def transpose(m):
-    X, Y, Z = m._data
-    return Matrix3d(X, Y, Z).transpose()
+    result = Matrix3d()
+    for i in range(3):
+        for j in range(3):
+            result._data[i][j] = m._data[j][i]
+    return result

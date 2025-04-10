@@ -1,20 +1,45 @@
-from src.vector3d import Vector3d, normalize, clamp, swap
+from src.vector3d import Vector3d, normalize, clamp, swap as vector_swap
+from src.matrix3d import Matrix3d, transpose, swap as matrix_swap
 
 def main():
     print("RayTracer")
     a = Vector3d(1.0, 0.0, -1.0)
     b = Vector3d(-1.0, 1.0, 1.0)
+    c = Vector3d()
+    d = Vector3d(1.0)
     print("a = " + str(a))
     print("b = " + str(b))
+    print("c = " + str(c))
+    print("d = " + str(d))
+    print("Vector3d.size() = " + str(Vector3d.size()))
+    print("a.size() = " + str(a.size()))
+    for i in a:
+        print(i)
+    print("a[0] = " + str(a[0]))
+    a[0] = 2.0
+    print("a[0] = 2.0 = " + str(a[0]))
+    a[0] = 1.0
+    print("a == b = " + str(a == b))
+    print("a != b = " + str(a != b))
+    print("-d = " + str(-d))
     print("a + b = " + str(a + b))
     print("a - b = " + str(a - b))
     print("a * 2 = " + str(a * 2))
     print("2 * a = " + str(2 * a))
     print("b / 2 = " + str(b / 2))
+    c += d
+    print("c += d = " + str(c))
+    c -= d
+    print("c -= d = " + str(c))
+    d *= 2
+    print("d *= 2 = " + str(d))
+    d /= 2
+    print("d /= 2 = " + str(d))
     print("a.dot(b) = " + str(a.dot(b)))
     print("b.dot(a) = " + str(b.dot(a)))
     print("a.squared_length() = " + str(a.squared_length()))
     print("b.length() = " + str(b.length()))
+    print("a.squared_distance(b) = " + str(a.squared_distance(b)))
     print("a.distance(b) = " + str(a.distance(b)))
     print("a.cross(b) = " + str(a.cross(b)))
     print("b.cross(a) = " + str(b.cross(a)))
@@ -28,12 +53,72 @@ def main():
     print("b.clamp() = " + str(b.clamp(0.6, 1)))
     print("a = " + str(a))
     print("b = " + str(b))
-    print("swap(a, b)")
-    swap(a, b)
+    print("vector_swap(a, b)")
+    vector_swap(a, b)
     print("a = " + str(a))
-    print("b = " + str(b))
-    print("Vector3d.size() = " + str(Vector3d.size()))
-    print("a.size() = " + str(a.size()))
+    print("b = " + str(b) + "\n")
+    print("--------------------------------------------------------\n")
+
+    e = Vector3d(1.0, 2.0, 3.0)
+    f = Vector3d(4.0, 5.0, 6.0)
+    g = Vector3d(7.0, 8.0, 9.0)
+    print("e = " + str(e))
+    print("f = " + str(f))
+    print("g = " + str(g))
+    am = Matrix3d(e, f, g)
+    bm = Matrix3d()
+    cm = Matrix3d(1.0)
+    print("am = " + str(am))
+    print("bm = " + str(bm))
+    print("cm = " + str(cm))
+    print("Matrix3d.width() = " + str(Matrix3d.width()))
+    print("am.width() = " + str(am.width()))
+    print("Matrix3d.height() = " + str(Matrix3d.height()))
+    print("am.height() = " + str(am.height()))
+    print("Matrix3d.size() = " + str(Matrix3d.size()))
+    print("am.size() = " + str(am.size()))
+    for i in am:
+        print(i)
+    cm.clear(2.0)
+    print("cm.clear(2.0) = " + str(cm))
+    cm.clear()
+    print("cm.clear() = " + str(cm))
+    cm.set_diagonal(2.0)
+    print("cm.set_diagonal(2.0) = " + str(cm))
+    cm.set_diagonal()
+    print("cm.set_diagonal() = " + str(cm))
+    print("am.transpose() = " + str(am.transpose()))
+    print("am[0][0] = " + str(am[0][0]))
+    am[0][0] = 2.0
+    print("am[0][0] = 2.0 = " + str(am[0][0]))
+    am[0][0] = 1.0
+    bm.clear(2.0)
+    print("am + bm = " + str(am + bm))
+    print("am - bm = " + str(am - bm))
+    print("am * bm = " + str(am * bm))
+    print("bm * am = " + str(bm * am))
+    print("am * d = " + str(am * d))
+    print("d * am = " + str(d * am))
+    print("am * 2 = " + str(am * 2))
+    print("2 * am = " + str(2 * am))
+    print("am / 2 = " + str(am / 2))
+    am += bm
+    print("am += bm = " + str(am))
+    am -= bm
+    print("am -= bm = " + str(am))
+    am *= 2
+    print("am *= 2 = " + str(am))
+    am /= 2
+    print("am /= 2 = " + str(am))
+    am *= bm
+    print("am *= bm = " + str(am))
+    print("am = " + str(am))
+    print("transpose(am) = " + str(transpose(am)))
+    print("am = " + str(am))
+    print("bm = " + str(bm))
+    matrix_swap(am, bm)
+    print("am = " + str(am))
+    print("bm = " + str(bm) + "\n")
 
 if __name__ == "__main__":
     main()
