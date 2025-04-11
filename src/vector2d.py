@@ -133,8 +133,8 @@ class Vector2d:
         self /= self.length()
         return self
     
-def normalize(v):
+def normalize(v: Vector2d):
     return v / v.length()
 
-def swap(a , b):
+def swap(a: Vector2d, b: Vector2d):
     a.vec, b.vec = b.vec, a.vec

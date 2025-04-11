@@ -143,12 +143,12 @@ class Vector3d:
         self /= self.length()
         return self
     
-def normalize(v):
+def normalize(v: Vector3d):
     return v / v.length()
 
-def swap(a , b):
+def swap(a: Vector3d, b: Vector3d):
     a.vec, b.vec = b.vec, a.vec
 
-def clamp(v, lower = 0.0, upper = 1.0):
+def clamp(v: Vector3d, lower = 0.0, upper = 1.0):
     x, y, z = v.vec
     return Vector3d(max(lower, min(x, upper)), max(lower, min(y, upper)), max(lower, min(z, upper)))

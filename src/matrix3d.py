@@ -164,10 +164,10 @@ class Matrix3d:
                 self._data[i][j] /= scale
         return self
 
-def swap(a , b):
+def swap(a: Matrix3d , b: Matrix3d):
     a._data, b._data = b._data, a._data
 
-def transpose(m):
+def transpose(m: Matrix3d):
     result = Matrix3d()
     for i in range(3):
         for j in range(3):
