@@ -1,5 +1,8 @@
 from src.vector3d import Vector3d, normalize, clamp, swap as vector_swap
 from src.matrix3d import Matrix3d, transpose, swap as matrix_swap
+from src.transformation3d import Transformation3d
+from src.ray import Ray, transform, inverse_transform, swap as ray_swap
+
 
 def main():
     print("RayTracer")
@@ -119,6 +122,37 @@ def main():
     matrix_swap(am, bm)
     print("am = " + str(am))
     print("bm = " + str(bm) + "\n")
+    print("--------------------------------------------------------\n")
+
+    h = Vector3d(1.0, 0.0, 0.0)
+    print("h = " + str(h))
+    i = Vector3d(5.0, 0.0, 0.0)
+    print("i = " + str(i))
+    ar = Ray(h, i)
+    br = Ray(h, i)
+    print("ar = " + str(ar))
+    print("br = " + str(br))
+    print("ar.origin() = " + str(ar.origin()))
+    print("ar.direction() = " + str(ar.direction()))
+    print("ar[2.0] = " + str(ar[2.0]))
+    print("ar[Vector3d(3.0, 0.0, 0.0)] = " + str(ar[Vector3d(3.0, 0.0, 0.0)]))
+    print("ar[i] = " + str(ar[i]))
+    cm = Matrix3d(-1.0)
+    print("cm = " + str(cm))
+    at = Transformation3d(h, cm, cm)
+    print("at = " + str(at))
+    print("ar.transform(at) = " + str(ar.transform(at)))
+    print("transform(br) = " + str(transform(br, at)))
+    print("ar = " + str(ar))
+    print("br = " + str(br))
+    ray_swap(ar, br)
+    print("ar = " + str(ar))
+    print("br = " + str(br))
+    print("inverse_transform(ar, at) = " + str(inverse_transform(ar, at)))
+    print("br.inverse_transform(at) = " + str(br.inverse_transform(at)))
+    print("ar = " + str(ar))
+    print("br = " + str(br))
+
 
 if __name__ == "__main__":
     main()

@@ -96,7 +96,7 @@ class Matrix3d:
             return result
         
         # Scalar multiplication
-        else:
+        elif isinstance(other, (int, float)):
             result = Matrix3d()
             for i in range(3):
                 for j in range(3):
@@ -150,7 +150,7 @@ class Matrix3d:
             return self
         
         # Scalar multiplication
-        else:
+        elif isinstance(other, (int, float)):
             for i in range(3):
                 for j in range(3):
                     self._data[i][j] *= other

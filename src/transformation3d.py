@@ -1,5 +1,5 @@
-from vector3d import Vector3d
-from matrix3d import Matrix3d
+from .vector3d import Vector3d
+from .matrix3d import Matrix3d
 
 class Transformation3d:
     _translation: Vector3d

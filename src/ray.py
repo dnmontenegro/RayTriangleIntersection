@@ -1,6 +1,5 @@
-from vector3d import Vector3d
-from vector3d import normalize
-from transformation3d import Transformation3d
+from .vector3d import Vector3d, normalize
+from .transformation3d import Transformation3d
 
 class Ray:
     _origin: Vector3d
@@ -18,12 +17,13 @@ class Ray:
 
     def direction(self):
         return self._direction
-
-    def __call__(self, t):
-        return self._origin + t * self._direction
-
-    def __call__(self, point: Vector3d):
-        return self._direction.dot(point - self._origin)
+    
+    def __getitem__(self, arg):
+        if isinstance(arg, (int, float)):
+            return self._origin + arg * self._direction
+        
+        elif isinstance(arg, Vector3d):
+            return self._direction.dot(arg - self._origin)
 
     def transform(self, t: Transformation3d):
         self._origin = t.transform_point(self._origin)
@@ -35,7 +35,7 @@ class Ray:
         self._direction = t.inverse_transform_direction(self._direction)
         return self
 
-def swap(a , b):
+def swap(a: Ray, b: Ray):
     a._origin, b._origin = b._origin, a._origin
     a._direction, b._direction = b._direction, a._direction
 
