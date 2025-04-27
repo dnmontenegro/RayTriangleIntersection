@@ -110,6 +110,7 @@ class Matrix3d:
                 for j in range(3):
                     result[j] += self._data[i][j] * other[i]
             return result
+        
         else:
             return self * other
     

@@ -152,7 +152,7 @@ def main():
     print("br.inverse_transform(at) = " + str(br.inverse_transform(at)))
     print("ar = " + str(ar))
     print("br = " + str(br))
-
+    print("--------------------------------------------------------\n")
 
 if __name__ == "__main__":
     main()
