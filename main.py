@@ -1,158 +1,62 @@
-from src.vector3d import Vector3d, normalize, clamp, swap as vector_swap
-from src.matrix3d import Matrix3d, transpose, swap as matrix_swap
-from src.transformation3d import Transformation3d
-from src.ray import Ray, transform, inverse_transform, swap as ray_swap
+from src.image import Image
+from src.camera import Camera
+from src.triangle import Triangle
+from src.vector3d import Vector3d
+from src.color import Color
+from src.imageio import export_image
 
+def generate_image(cam: Camera, tri: Triangle):
+    t = [None]
+    barycentric_coord = [None]
+    result = Image(cam.width(), cam.height())
+
+    for y in range(result.height()):
+        for x in range(result.width()):
+            r = cam(x, y)
+
+            hit = tri.intersect(r, barycentric_coord, t)
+
+            if hit:
+                result[(x, y)] = Color(barycentric_coord[0][0], barycentric_coord[0][1], barycentric_coord[0][2])
+            else:
+                result[(x, y)] = Color(0.0, 0.0, 0.0)
+    
+    return result
 
 def main():
-    print("RayTracer")
-    a = Vector3d(1.0, 0.0, -1.0)
-    b = Vector3d(-1.0, 1.0, 1.0)
-    c = Vector3d()
-    d = Vector3d(1.0)
-    print("a = " + str(a))
-    print("b = " + str(b))
-    print("c = " + str(c))
-    print("d = " + str(d))
-    print("Vector3d.size() = " + str(Vector3d.size()))
-    print("a.size() = " + str(a.size()))
-    for i in a:
-        print(i)
-    print("a[0] = " + str(a[0]))
-    a[0] = 2.0
-    print("a[0] = 2.0 = " + str(a[0]))
-    a[0] = 1.0
-    print("a == b = " + str(a == b))
-    print("a != b = " + str(a != b))
-    print("-d = " + str(-d))
-    print("a + b = " + str(a + b))
-    print("a - b = " + str(a - b))
-    print("a * 2 = " + str(a * 2))
-    print("2 * a = " + str(2 * a))
-    print("b / 2 = " + str(b / 2))
-    c += d
-    print("c += d = " + str(c))
-    c -= d
-    print("c -= d = " + str(c))
-    d *= 2
-    print("d *= 2 = " + str(d))
-    d /= 2
-    print("d /= 2 = " + str(d))
-    print("a.dot(b) = " + str(a.dot(b)))
-    print("b.dot(a) = " + str(b.dot(a)))
-    print("a.squared_length() = " + str(a.squared_length()))
-    print("b.length() = " + str(b.length()))
-    print("a.squared_distance(b) = " + str(a.squared_distance(b)))
-    print("a.distance(b) = " + str(a.distance(b)))
-    print("a.cross(b) = " + str(a.cross(b)))
-    print("b.cross(a) = " + str(b.cross(a)))
-    print("normalize(a) = " + str(normalize(a)))
-    print("abs(a) = " + str(abs(a)))
-    print("b.normalize() = " + str(b.normalize()))
-    print("b.abs() = " + str(b.abs()))
-    print("a = " + str(a))
-    print("b = " + str(b))
-    print("clamp(a) = " + str(clamp(a, 0.6, 1)))
-    print("b.clamp() = " + str(b.clamp(0.6, 1)))
-    print("a = " + str(a))
-    print("b = " + str(b))
-    print("vector_swap(a, b)")
-    vector_swap(a, b)
-    print("a = " + str(a))
-    print("b = " + str(b) + "\n")
-    print("--------------------------------------------------------\n")
+    cam = Camera(Vector3d(0.0, 0.0, 0.0), Vector3d(0.0, 0.0, -1.0), Vector3d(0.0, 1.0, 0.0), 60.0, 512, 512)
 
-    e = Vector3d(1.0, 2.0, 3.0)
-    f = Vector3d(4.0, 5.0, 6.0)
-    g = Vector3d(7.0, 8.0, 9.0)
-    print("e = " + str(e))
-    print("f = " + str(f))
-    print("g = " + str(g))
-    am = Matrix3d(e, f, g)
-    bm = Matrix3d()
-    cm = Matrix3d(1.0)
-    print("am = " + str(am))
-    print("bm = " + str(bm))
-    print("cm = " + str(cm))
-    print("Matrix3d.width() = " + str(Matrix3d.width()))
-    print("am.width() = " + str(am.width()))
-    print("Matrix3d.height() = " + str(Matrix3d.height()))
-    print("am.height() = " + str(am.height()))
-    print("Matrix3d.size() = " + str(Matrix3d.size()))
-    print("am.size() = " + str(am.size()))
-    for i in am:
-        print(i)
-    cm.clear(2.0)
-    print("cm.clear(2.0) = " + str(cm))
-    cm.clear()
-    print("cm.clear() = " + str(cm))
-    cm.set_diagonal(2.0)
-    print("cm.set_diagonal(2.0) = " + str(cm))
-    cm.set_diagonal()
-    print("cm.set_diagonal() = " + str(cm))
-    print("am.transpose() = " + str(am.transpose()))
-    print("am[0][0] = " + str(am[0][0]))
-    am[0][0] = 2.0
-    print("am[0][0] = 2.0 = " + str(am[0][0]))
-    am[0][0] = 1.0
-    bm.clear(2.0)
-    print("am + bm = " + str(am + bm))
-    print("am - bm = " + str(am - bm))
-    print("am * bm = " + str(am * bm))
-    print("bm * am = " + str(bm * am))
-    print("am * d = " + str(am * d))
-    print("d * am = " + str(d * am))
-    print("am * 2 = " + str(am * 2))
-    print("2 * am = " + str(2 * am))
-    print("am / 2 = " + str(am / 2))
-    am += bm
-    print("am += bm = " + str(am))
-    am -= bm
-    print("am -= bm = " + str(am))
-    am *= 2
-    print("am *= 2 = " + str(am))
-    am /= 2
-    print("am /= 2 = " + str(am))
-    am *= bm
-    print("am *= bm = " + str(am))
-    print("am = " + str(am))
-    print("transpose(am) = " + str(transpose(am)))
-    print("am = " + str(am))
-    print("bm = " + str(bm))
-    matrix_swap(am, bm)
-    print("am = " + str(am))
-    print("bm = " + str(bm) + "\n")
-    print("--------------------------------------------------------\n")
+    print("Generating image 1")
+    t1 = Triangle(Vector3d(1.0, -1.0, -2.0), Vector3d(0.0, 1.0, -2.0), Vector3d(-1.0, -1.0, -2.0))
+    result1 = generate_image(cam, t1)
+    export_image("result1.ppm", result1)
 
-    h = Vector3d(1.0, 0.0, 0.0)
-    print("h = " + str(h))
-    i = Vector3d(5.0, 0.0, 0.0)
-    print("i = " + str(i))
-    ar = Ray(h, i)
-    br = Ray(h, i)
-    print("ar = " + str(ar))
-    print("br = " + str(br))
-    print("ar.origin() = " + str(ar.origin()))
-    print("ar.direction() = " + str(ar.direction()))
-    print("ar[2.0] = " + str(ar[2.0]))
-    print("ar[Vector3d(3.0, 0.0, 0.0)] = " + str(ar[Vector3d(3.0, 0.0, 0.0)]))
-    print("ar[i] = " + str(ar[i]))
-    cm = Matrix3d(-1.0)
-    print("cm = " + str(cm))
-    at = Transformation3d(h, cm, cm)
-    print("at = " + str(at))
-    print("ar.transform(at) = " + str(ar.transform(at)))
-    print("transform(br) = " + str(transform(br, at)))
-    print("ar = " + str(ar))
-    print("br = " + str(br))
-    ray_swap(ar, br)
-    print("ar = " + str(ar))
-    print("br = " + str(br))
-    print("inverse_transform(ar, at) = " + str(inverse_transform(ar, at)))
-    print("br.inverse_transform(at) = " + str(br.inverse_transform(at)))
-    print("ar = " + str(ar))
-    print("br = " + str(br))
-    print("--------------------------------------------------------\n")
+    print("Generating image 2")
+    t2 = Triangle(Vector3d(1.0, -1.0, 2.0), Vector3d(0.0, 1.0, 2.0), Vector3d(-1.0, -1.0, 2.0))
+    result2 = generate_image(cam, t2)
+    export_image("result2.ppm", result2)
+
+    print("Generating image 3")
+    t3 = Triangle(Vector3d(-1.0, -1.0, -2.0), Vector3d(1.0, -1.0, -2.0), Vector3d(0.0, 1.0, -2.0))
+    result3 = generate_image(cam, t3)
+    export_image("result3.ppm", result3)
+
+    print("Generating image 4")
+    t4 = Triangle(Vector3d(-1.0, -1.0, 2.0), Vector3d(0.0, 1.0, 2.0), Vector3d(1.0, -1.0, 2.0))
+    result4 = generate_image(cam, t4)
+    export_image("result4.ppm", result4)
+
+    print("Generating image 5")
+    t5 = Triangle(Vector3d(-1.0, -1.0, -1.0), Vector3d(1.0, -1.0, -1.0), Vector3d(1.0, 1.0, -1.0))
+    result5 = generate_image(cam, t5)
+    export_image("result5.ppm", result5)
+
+    print("Generating image 6")
+    t6 = Triangle(Vector3d(-1.0, 2.0, -1.0), Vector3d(0.0, 2.0, 1.0), Vector3d(1.0, 2.0, -1.0))
+    result6 = generate_image(cam, t6)
+    export_image("result6.ppm", result6)
+
+    print("Finished")
 
 if __name__ == "__main__":
     main()

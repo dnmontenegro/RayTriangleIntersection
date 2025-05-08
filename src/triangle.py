@@ -2,7 +2,6 @@ from .vector3d import Vector3d, normalize
 from .vector2d import Vector2d
 from .ray import Ray
 from .boundingbox import BoundingBox
-
 import math
 
 class Triangle:
@@ -138,10 +137,10 @@ class Triangle:
         d = -N.dot(self.vertex(0))
         t[0] = -(P_0.dot(N) + d) / (V.dot(N))
         
-        P = P_0 + t[0] * V
-        A1 = 0.5 * ((self.vertex(1) - P).cross(self.vertex(2) - P)).dot(N)
-        A2 = 0.5 * ((self.vertex(2) - P).cross(self.vertex(0) - P)).dot(N)
-        A3 = 0.5 * ((self.vertex(0) - P).cross(self.vertex(1) - P)).dot(N)
+        P = r[t[0]]
+        A1 = ((self.vertex(1) - P).cross(self.vertex(2) - P)).dot(N)
+        A2 = ((self.vertex(2) - P).cross(self.vertex(0) - P)).dot(N)
+        A3 = ((self.vertex(0) - P).cross(self.vertex(1) - P)).dot(N)
         
         alpha = A1 / abs(A1 + A2 + A3)
         beta = A2 / abs(A1 + A2 + A3)

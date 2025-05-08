@@ -47,7 +47,7 @@ class BoundingBox:
         result += bb
         return result
     
-    def isHit(self, r: Ray):
+    def is_hit(self, r: Ray):
         box_interval = Interval(0, 10e10)
 
         for i in range(Vector3d.size()):
